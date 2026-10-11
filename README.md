@@ -1,104 +1,215 @@
-# Google Gemini & Multimodal AI Studio Hub
+# Gemini Multimodal AI Studio Hub
 
-A comprehensive, modular collection of interactive applications and CLI tools leveraging **Google Gemini & AI Studio APIs**.
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Google GenAI SDK](https://img.shields.io/badge/google--genai-v1.0%2B-orange.svg)](https://github.com/google-gemini/generative-ai-python)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+An all-in-one, modular open-source suite of **interactive web applications, desktop GUIs, and CLI tools** powered by the **Google Gemini Multimodal API** (`google-genai` SDK).
+
+Explore and experiment with speech-to-speech translation, expressive text-to-speech, audio transcription with speaker diarization, AI video generation, music composition, and search-grounded reasoning.
 
 ---
 
-## 📁 Project Architecture
+## ✨ Features Overview
+
+| Feature | Tech / Model | Description |
+| :--- | :--- | :--- |
+| 🎤 **Live Voice Interpreter** | `gemini-3.5-live-translate-preview` | Real-time speech-to-speech microphone translation with live bilingual subtitles over WebSockets. |
+| 🎙️ **TTS Web Studio** | `gemini-3.1-flash` & `gTTS` | Multi-engine voice synthesizer with 30 expressive voices, emotional tone steering, and gTTS fallback. |
+| 🖥️ **Desktop GUI** | Tkinter & `google-genai` | Native Windows/cross-platform desktop interface for TTS synthesis and voice testing. |
+| 📝 **Transcription & Diarization** | `gemini-2.5-flash` / `gemini-3.1-flash` | Automatic speech-to-text with millisecond timestamps and multi-speaker separation. |
+| 🌐 **Search Grounding** | Google Search Tool | Fact-based queries grounded with real-time web retrieval, complete with citations and source URLs. |
+| 🎬 **Video Generation** | Google Veo (`veo-3.1-generate-preview`) | Text-to-video and image-to-video generation with matched synchronized audio. |
+| 🎵 **Music Generation** | Google Lyria (`lyria-3.5`) | Instrumental tracks, ambient soundscapes, lo-fi beats, and structured multi-section compositions. |
+
+---
+
+## 📁 Repository Structure
 
 ```text
-gemini/ (or google_tts/)
-├── tts/                  # Text-to-Speech & Real-Time Voice Translation
+gemini/
+├── tts/                  # Speech Synthesis & Real-Time Voice Translation
 │   ├── app.py                   # Multi-Engine Web Studio (Port 8080)
-│   ├── live_translate_app.py    # Real-Time Microphone Speech-to-Speech Interpreter (Port 8081)
-│   ├── app_gui.py               # Native Windows Desktop GUI (Tkinter)
+│   ├── live_translate_app.py    # Real-Time Microphone Speech-to-Speech Web App (Port 8081)
+│   ├── app_gui.py               # Native Desktop GUI (Tkinter)
 │   ├── test_gemini_tts.py       # Gemini 3.1 Flash TTS CLI (30 expressive voices)
 │   ├── test_live_translate.py   # Gemini 3.5 Live Voice Translate CLI
 │   ├── test_gtts.py             # Google Translate TTS CLI (100+ languages & accents)
 │   ├── test_browser_tts.html    # Chrome Web Speech API in-browser tester
-│   ├── output/                  # Generated audio files (.wav & .mp3)
-│   └── README.md                # Dedicated TTS documentation
-│
-├── video/                # Video Generation (Google Veo)
-│   ├── generate_video.py        # Text-to-Video & Image-to-Video CLI (Veo 3.1)
-│   ├── output/                  # Generated video files (.mp4)
-│   └── README.md                # Video generation documentation
-│
-├── music/                # Music & Audio Generation (Google Lyria)
-│   ├── generate_music.py        # Instrumental & ambient music generation CLI (Lyria 3.5)
-│   ├── output/                  # Generated music files (.mp3)
-│   └── README.md                # Music generation documentation
+│   └── output/                  # Generated sample audio (.wav / .mp3)
 │
 ├── transcribe/           # Audio Transcription & Speaker Diarization
-│   ├── transcribe_audio.py      # Audio-to-text with timestamps & speaker identification
-│   ├── output/                  # Transcripts and sample output
-│   └── README.md                # Transcription documentation
+│   ├── transcribe_audio.py      # Audio-to-text CLI with timestamps & speaker labels
+│   └── output/                  # Transcripts and sample output
 │
 ├── grounding/            # Real-Time Google Search Grounding
-│   ├── search_and_maps.py       # Live web retrieval with verified citations and links
-│   └── README.md                # Grounding documentation
+│   └── search_and_maps.py       # Live web retrieval with verified citations and links
+│
+├── video/                # AI Video Generation (Google Veo)
+│   ├── generate_video.py        # Text-to-Video & Image-to-Video CLI
+│   └── output/                  # Generated video files (.mp4)
+│
+├── music/                # AI Music & Audio Generation (Google Lyria)
+│   ├── generate_music.py        # Instrumental & ambient music generation CLI
+│   └── output/                  # Generated music files (.mp3)
 │
 ├── requirements.txt      # Python dependencies
-└── README.md             # Master documentation (this file)
+└── README.md             # Project documentation
 ```
 
 ---
 
-## 🚀 Quick Launch Guide
+## 🚀 Getting Started
 
-### 1. 🎤 Live Voice Interpreter (Real-Time Microphone)
-Translate your spoken words in real time with audio output and bilingual subtitles:
-```powershell
+### 1. Prerequisites
+- **Python**: Version 3.10 or higher.
+- **FFmpeg**: Required for audio format conversion and media playback (`ffplay`).
+  - **Windows**: `winget install Gyan.FFmpeg` or download from [ffmpeg.org](https://ffmpeg.org/download.html).
+  - **macOS**: `brew install ffmpeg`
+  - **Linux (Ubuntu/Debian)**: `sudo apt update && sudo apt install ffmpeg`
+- **Google AI Studio API Key**: A free API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+### 2. Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/weidu-tpvision/gemini.git
+   cd gemini
+   ```
+
+2. **Create and activate a virtual environment:**
+   - **Windows (PowerShell):**
+     ```powershell
+     python -m venv .venv
+     .venv\Scripts\Activate.ps1
+     ```
+   - **macOS / Linux:**
+     ```bash
+     python3 -m venv .venv
+     source .venv/bin/activate
+     ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### 3. Configure Your API Key
+
+Obtain your API key from [Google AI Studio](https://aistudio.google.com/app/apikey), then export it as an environment variable:
+
+- **Windows (PowerShell):**
+  ```powershell
+  $env:GEMINI_API_KEY = "your_api_key_here"
+  
+  # Or set permanently for your user account:
+  [System.Environment]::SetEnvironmentVariable("GEMINI_API_KEY", "your_api_key_here", "User")
+  ```
+
+- **macOS / Linux (Bash / Zsh):**
+  ```bash
+  export GEMINI_API_KEY="your_api_key_here"
+  
+  # Or add to ~/.bashrc or ~/.zshrc for permanent access
+  ```
+
+---
+
+## 🎯 Quickstart Guide
+
+### 🎤 1. Real-Time Voice Interpreter (Live Microphone)
+Stream your spoken voice directly into Gemini 3.5 Live over WebSockets and receive spoken translations with bilingual subtitles:
+
+```bash
 cd tts
-& "$HOME\venv\google_tts\Scripts\python.exe" live_translate_app.py
+python live_translate_app.py
 ```
-👉 Open browser: `http://127.0.0.1:8081`
+👉 Open your browser at **[http://127.0.0.1:8081](http://127.0.0.1:8081)**. Allow microphone access, choose your target language, and start speaking.
 
-### 2. 🎙️ Text-to-Speech Web Studio
-Interactive web app to synthesize, compare voices, and play/download audio:
-```powershell
+---
+
+### 🎙️ 2. Text-to-Speech Web Studio
+A browser interface for synthesizing, comparing voices, testing emotional styles, and downloading audio:
+
+```bash
 cd tts
-& "$HOME\venv\google_tts\Scripts\python.exe" app.py
+python app.py
 ```
-👉 Open browser: `http://127.0.0.1:8080`
+👉 Open your browser at **[http://127.0.0.1:8080](http://127.0.0.1:8080)**.
 
-### 3. 🖥️ Native Desktop GUI
-Tkinter Windows desktop app:
-```powershell
+---
+
+### 🖥️ 3. Native Desktop GUI
+A lightweight desktop app for quick TTS experiments:
+
+```bash
 cd tts
-& "$HOME\venv\google_tts\Scripts\python.exe" app_gui.py
+python app_gui.py
 ```
 
-### 4. 📝 Audio Transcription with Speaker Diarization
-Transcribe any meeting or dialogue recording with speaker labels and timestamps:
-```powershell
+---
+
+### 📝 4. Audio Transcription & Diarization
+Transcribe audio files with automatic speaker separation and millisecond timestamps:
+
+```bash
 cd transcribe
-& "$HOME\venv\google_tts\Scripts\python.exe" transcribe_audio.py -i ..\tts\output\gemini_multispeaker_sample.wav --timestamps
-```
 
-### 5. 🌐 Real-Time Search Grounding
-Query live, grounded facts from Google Search with verified source URLs:
-```powershell
-cd grounding
-& "$HOME\venv\google_tts\Scripts\python.exe" search_and_maps.py "What are the latest announcements for Google Gemini?"
-```
+# Transcribe sample file with speaker labels:
+python transcribe_audio.py -i ../tts/output/gemini_multispeaker_sample.wav
 
-### 6. 🎬 Video Generation (Google Veo)
-```powershell
-cd video
-& "$HOME\venv\google_tts\Scripts\python.exe" generate_video.py -p "A cinematic drone shot of a futuristic neon city in the rain" --play
-```
-
-### 7. 🎵 Music Generation (Google Lyria)
-```powershell
-cd music
-& "$HOME\venv\google_tts\Scripts\python.exe" generate_music.py -p "Lofi hip hop chill beats with gentle piano and vinyl crackle" --play
+# Include precise timestamps:
+python transcribe_audio.py -i ../tts/output/gemini_multispeaker_sample.wav --timestamps
 ```
 
 ---
 
-## 🔑 Authentication & Prerequisites
+### 🌐 5. Real-Time Google Search Grounding
+Ask questions that require live, real-time facts with verified web links and sources:
 
-1. **Python Environment**: All packages are installed in `$HOME\venv\google_tts`.
-2. **API Key**: `GEMINI_API_KEY` is permanently stored in Windows User Environment variables and PowerShell `$PROFILE`.
-3. **Media Tools**: `ffmpeg` and `ffplay` are installed via WinGet and available globally.
+```bash
+cd grounding
+python search_and_maps.py "What are the latest announcements regarding Google Gemini?"
+```
+
+---
+
+### 🎬 6. AI Video Generation (Google Veo)
+Generate high-definition videos from text prompts or reference images:
+
+```bash
+cd video
+
+# Generate a 5-second cinematic clip and preview with ffplay:
+python generate_video.py -p "A cinematic drone shot of a futuristic neon city in the rain" --play
+```
+
+---
+
+### 🎵 7. AI Music Generation (Google Lyria)
+Create instrumental music and ambient loops from text prompts:
+
+```bash
+cd music
+
+# Generate a lo-fi beat and play immediately:
+python generate_music.py -p "Lofi hip hop chill beats with gentle piano and vinyl crackle" --play
+```
+
+---
+
+## ⚙️ Troubleshooting
+
+- **Microphone not working in Live Interpreter**:
+  - Ensure browser permissions allow microphone access for `http://127.0.0.1:8081`.
+  - In Chrome, navigate to `chrome://settings/content/microphone` to confirm your default input device.
+- **FFmpeg not recognized**:
+  - Verify that `ffmpeg` is in your system's PATH by running `ffmpeg -version` in your terminal.
+- **API Key Errors (`GEMINI_API_KEY is not set`)**:
+  - Ensure the variable is set in the same terminal session running the scripts (`echo $env:GEMINI_API_KEY` or `echo $GEMINI_API_KEY`).
+
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).

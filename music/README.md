@@ -14,13 +14,13 @@ Generate 44.1 kHz high-fidelity stereo audio, background loops, soundscapes, and
 
 ## Usage
 
-```powershell
+```bash
 # 30-Second Ambient Lo-Fi Track:
-& "$HOME\venv\google_tts\Scripts\python.exe" generate_music.py -p "Relaxing lo-fi hip hop beat with smooth Rhodes piano, mellow guitar chords, and warm vinyl crackle" --play
+python generate_music.py -p "Relaxing lo-fi hip hop beat with smooth Rhodes piano, mellow guitar chords, and warm vinyl crackle" --play
 
 # Energetic Synthwave Track:
-& "$HOME\venv\google_tts\Scripts\python.exe" generate_music.py -p "Upbeat 128 BPM retro 80s synthwave with punchy drums, arpeggiated bassline, and warm analog synthesizers" -p
+python generate_music.py -p "Upbeat 128 BPM retro 80s synthwave with punchy drums, arpeggiated bassline, and warm analog synthesizers" -p
 
 # Full-Length Structured Song:
-& "$HOME\venv\google_tts\Scripts\python.exe" generate_music.py --full -p "An epic fantasy cinematic orchestral soundtrack starting with flute and building into massive brass and battle drums"
+python generate_music.py --full -p "An epic fantasy cinematic orchestral soundtrack starting with flute and building into massive brass and battle drums"
 ```

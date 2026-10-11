@@ -13,13 +13,13 @@ Transcribe audio files into formatted text with **speaker identification (diariz
 
 ## Usage
 
-```powershell
+```bash
 # Basic Transcription with Speaker Diarization:
-& "$HOME\venv\google_tts\Scripts\python.exe" transcribe_audio.py -i ..\tts\output\gemini_multispeaker_sample.wav
+python transcribe_audio.py -i ../tts/output/gemini_multispeaker_sample.wav
 
 # With Precise Timestamps:
-& "$HOME\venv\google_tts\Scripts\python.exe" transcribe_audio.py -i ..\tts\output\gemini_multispeaker_sample.wav --timestamps
+python transcribe_audio.py -i ../tts/output/gemini_multispeaker_sample.wav --timestamps
 
 # Custom output file:
-& "$HOME\venv\google_tts\Scripts\python.exe" transcribe_audio.py -i meeting.mp3 --timestamps -o output/meeting_notes.txt
+python transcribe_audio.py -i meeting.mp3 --timestamps -o output/meeting_notes.txt
 ```
