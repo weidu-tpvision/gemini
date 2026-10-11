@@ -1,6 +1,6 @@
 # Google Gemini & Multimodal AI Studio Hub
 
-A comprehensive, modular collection of interactive applications and CLI tools leveraging **Google Gemini & AI Studio APIs** that are **100% free and require NO credit card**.
+A comprehensive, modular collection of interactive applications and CLI tools leveraging **Google Gemini & AI Studio APIs**.
 
 ---
 
