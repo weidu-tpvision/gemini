@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Google Chrome Web Speech TTS Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #202124;
+      background-color: #f8f9fa;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    h1 {
+      margin-top: 0;
+      color: #1a73e8;
+      font-size: 24px;
+    }
+    p.subtitle {
+      color: #5f6368;
+      font-size: 14px;
+      margin-top: -8px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 14px 0 6px;
+      font-size: 13px;
+    }
+    textarea, select, input[type="range"] {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .slider-val {
+      min-width: 40px;
+      font-variant-numeric: tabular-nums;
+      font-size: 13px;
+      color: #5f6368;
+    }
+    .btn-group {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary {
+      background: #1a73e8;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #1557b0;
+    }
+    .btn-secondary {
+      background: #e8eaed;
+      color: #3c4043;
+    }
+    .btn-secondary:hover {
+      background: #dadce0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #e6f4ea;
+      color: #137333;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>Google Web Speech API Tester</h1>
+      <span class="badge">100% Free / Built into Chrome</span>
+    </div>
+    <p class="subtitle">Uses the Google Text-to-Speech voices bundled directly within Google Chrome / Edge without any API keys or credit card.</p>
+
+    <label for="text-input">Text to speak:</label>
+    <textarea id="text-input">Hello! This is Google's built-in browser Text-to-Speech engine speaking. You can adjust the rate, pitch, and voice below.</textarea>
+
+    <label for="voice-select">Voice (Filtered to Google voices):</label>
+    <select id="voice-select">
+      <option value="">Loading available voices...</option>
+    </select>
+
+    <label for="rate-slider">Rate (Speed):</label>
+    <div class="slider-row">
+      <input type="range" id="rate-slider" min="0.5" max="2" step="0.1" value="1" />
+      <span id="rate-val" class="slider-val">1.0x</span>
+    </div>
+
+    <label for="pitch-slider">Pitch:</label>
+    <div class="slider-row">
+      <input type="range" id="pitch-slider" min="0.5" max="1.5" step="0.1" value="1" />
+      <span id="pitch-val" class="slider-val">1.0</span>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn-primary" id="btn-speak">Speak</button>
+      <button class="btn-secondary" id="btn-pause">Pause / Resume</button>
+      <button class="btn-secondary" id="btn-stop">Stop</button>
+    </div>
+  </div>
+
+  <script>
+    const voiceSelect = document.getElementById('voice-select');
+    const textInput = document.getElementById('text-input');
+    const rateSlider = document.getElementById('rate-slider');
+    const rateVal = document.getElementById('rate-val');
+    const pitchSlider = document.getElementById('pitch-slider');
+    const pitchVal = document.getElementById('pitch-val');
+    const btnSpeak = document.getElementById('btn-speak');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+
+    let voices = [];
+
+    function populateVoices() {
+      voices = window.speechSynthesis.getVoices();
+      voiceSelect.innerHTML = '';
+
+      // Prioritize Google voices first
+      const googleVoices = voices.filter(v => v.name.toLowerCase().includes('google'));
+      const otherVoices = voices.filter(v => !v.name.toLowerCase().includes('google'));
+
+      const allSorted = [...googleVoices, ...otherVoices];
+
+      allSorted.forEach((voice) => {
+        const option = document.createElement('option');
+        const isGoogle = voice.name.toLowerCase().includes('google');
+        option.textContent = `${voice.name} (${voice.lang}) ${isGoogle ? '⭐ [Google]' : ''}`;
+        option.value = voice.name;
+        if (voice.default || voice.name === 'Google US English') {
+          option.selected = true;
+        }
+        voiceSelect.appendChild(option);
+      });
+    }
+
+    populateVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
+    rateSlider.addEventListener('input', () => {
+      rateVal.textContent = `${rateSlider.value}x`;
+    });
+
+    pitchSlider.addEventListener('input', () => {
+      pitchVal.textContent = pitchSlider.value;
+    });
+
+    btnSpeak.addEventListener('click', () => {
+      if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+      }
+      const text = textInput.value.trim();
+      if (!text) return;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const selectedVoiceName = voiceSelect.value;
+      const selectedVoice = voices.find(v => v.name === selectedVoiceName);
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      utterance.rate = parseFloat(rateSlider.value);
+      utterance.pitch = parseFloat(pitchSlider.value);
+
+      speechSynthesis.speak(utterance);
+    });
+
+    btnPause.addEventListener('click', () => {
+      if (speechSynthesis.speaking) {
+        if (speechSynthesis.paused) {
+          speechSynthesis.resume();
+        } else {
+          speechSynthesis.pause();
+        }
+      }
+    });
+
+    btnStop.addEventListener('click', () => {
+      speechSynthesis.cancel();
+    });
+  </script>
+</body>
+</html>
